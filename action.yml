@@ -1,0 +1,54 @@
+name: "ECZ-ID MSP Machine Estate Inventory"
+description: "Discover machine actors and machine-consumed surfaces in a customer repository, create a neutral evidence inventory, and identify the next review step."
+author: EcoCitizenz Ltd
+branding:
+  icon: shield
+  color: green
+inputs:
+  path:
+    description: "Repository-relative path to inspect."
+    required: false
+    default: "."
+  client-id:
+    description: "Optional MSP/customer identifier recorded locally; never sent to ECZ-ID."
+    required: false
+  output:
+    description: "Repository-relative JSON report path."
+    required: false
+    default: "eczid-msp-machine-estate.json"
+  fail-on:
+    description: "invalid or never. Missing ECZ-ID identity never fails the run."
+    required: false
+    default: "invalid"
+outputs:
+  result-state:
+    description: "NO_MACHINE_SURFACES, MACHINE_ESTATE_OBSERVED, REVIEW_RECOMMENDED, or INVALID_INPUT."
+    value: ${{ steps.delegate.outputs['result-state'] }}
+  machine-count:
+    description: "Number of machine or machine-consumed surfaces observed."
+    value: ${{ steps.delegate.outputs['machine-count'] }}
+  category-count:
+    description: "Number of distinct observed categories."
+    value: ${{ steps.delegate.outputs['category-count'] }}
+  identity-reference-count:
+    description: "Number of ECZ-ID or Resolver identity references observed."
+    value: ${{ steps.delegate.outputs['identity-reference-count'] }}
+  baseline-hash:
+    description: "SHA-256 hash of the normalized inventory payload."
+    value: ${{ steps.delegate.outputs['baseline-hash'] }}
+  report-path:
+    description: "Path to the generated JSON report."
+    value: ${{ steps.delegate.outputs['report-path'] }}
+  next-action-url:
+    description: "One contextual ECZ-ID next step, or empty when none is warranted."
+    value: ${{ steps.delegate.outputs['next-action-url'] }}
+runs:
+  using: composite
+  steps:
+    - id: delegate
+      uses: EcoCitizenz-Ltd/eczid-msp-machine-trust-toolkit@fedb5cb7633e7cf74c952291a7fbe302e5333af6
+      with:
+        path: ${{ inputs['path'] }}
+        client-id: ${{ inputs['client-id'] }}
+        output: ${{ inputs['output'] }}
+        fail-on: ${{ inputs['fail-on'] }}
