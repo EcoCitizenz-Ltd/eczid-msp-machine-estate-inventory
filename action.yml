@@ -1,5 +1,5 @@
 name: "ECZ-ID MSP Machine Estate Inventory"
-description: "Discover machine actors and machine-consumed surfaces in a customer repository, create a neutral evidence inventory, and identify the next review step."
+description: "Discover machine actors and machine-consumed surfaces to create a neutral MSP evidence inventory."
 author: EcoCitizenz Ltd
 branding:
   icon: shield
